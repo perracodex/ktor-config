@@ -201,42 +201,57 @@ ktor {
 ### Sample HOCON configuration file corresponding yo the mentioned data classes examples
 ```hocon    
 ktor {
-	deployment {
-		port: 8080
-		sslPort: 8443
-		host: "localhost"
-	}
+    deployment {
+        port: 8080
+        sslPort: 8443
+        host: "localhost"
+    }
 }
 
 security {
     basicAuth {
-		providerName: "basic-auth"
-		realm: "some-realm"
-	}
-	jwtAuth {
-		providerName: "jwt-auth"
-		tokenLifetimeSec: 3600
-		audience: "some-audience"
-		realm: "some-realm"
-		issuer: "localhost"
-		secretKey: "9e6e26399b28fc5f5ad1e4431f8a387a60bf94b89716805a376319fcdca35ca8"
-	}
-	encryption {
-		atRest {
-			algorithm: "AES_256_PBE_CBC"
-			salt: "5c0744940b5c369b"
-			key: "db82fafdbfe33a8b2bff5297de6e3a5cc15d1309664543cd376839b4d3b6b62e"
-			sign: "6da315f14158bb5b986ea816cb78a329a6d1e0f724e031ca497d6b269cd8e475"
-		}
-		atTransit {
-			algorithm: "AES_256_PBE_CBC"
-			salt: "5c0744940b5c369b"
-			key: "db82fafdbfe33a8b2bff5297de6e3a5cc15d1309664543cd376839b4d3b6b62e"
-			sign: "6da315f14158bb5b986ea816cb78a329a6d1e0f724e031ca497d6b269cd8e475"
-		}
-	}
+        providerName: "basic-auth"
+        realm: "some-realm"
+    }
+    jwtAuth {
+        providerName: "jwt-auth"
+        tokenLifetimeSec: 3600
+        audience: "some-audience"
+        realm: "some-realm"
+        issuer: "localhost"
+        secretKey: "9e6e26399b28fc5f5ad1e4431f8a387a60bf94b89716805a376319fcdca35ca8"
+    }
+    encryption {
+        atRest {
+            algorithm: "AES_256_PBE_CBC"
+            salt: "5c0744940b5c369b"
+            key: "db82fafdbfe33a8b2bff5297de6e3a5cc15d1309664543cd376839b4d3b6b62e"
+            sign: "6da315f14158bb5b986ea816cb78a329a6d1e0f724e031ca497d6b269cd8e475"
+        }
+        atTransit {
+            algorithm: "AES_256_PBE_CBC"
+            salt: "5c0744940b5c369b"
+            key: "db82fafdbfe33a8b2bff5297de6e3a5cc15d1309664543cd376839b4d3b6b62e"
+            sign: "6da315f14158bb5b986ea816cb78a329a6d1e0f724e031ca497d6b269cd8e475"
+        }
+    }
 }
 ```
+
+--- 
+
+### Full working example
+
+Refer to the [krud project](https://github.com/perracodex/Kcrud).
+A full example with complex configuration structures and nested data classes is available in the `kcrud-core` module.
+
+Settings: 
+- https://github.com/perracodex/kcrud/tree/main/kcrud-core/src/main/kotlin/kcrud/core/settings
+
+Configuration:
+- https://github.com/perracodex/kcrud/tree/main/kcrud-core/src/main/resources/config
+- https://github.com/perracodex/kcrud/blob/main/kcrud-core/src/main/resources/config/config.conf
+- https://github.com/perracodex/kcrud/blob/main/kcrud-server/src/main/resources/application.conf
 
 ---
 
