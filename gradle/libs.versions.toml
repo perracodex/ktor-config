@@ -1,0 +1,23 @@
+# https://developer.android.com/build/migrate-to-catalogs
+
+[versions]
+
+dokka = "1.9.20"                        # https://github.com/Kotlin/dokka/releases
+kotlin = "2.0.20"                       # https://github.com/JetBrains/kotlin/releases
+ktor = "2.3.12"                         # https://ktor.io/docs/releases.html#release-details
+vanniktech = "0.29.0"                   # https://github.com/vanniktech/gradle-maven-publish-plugin/releases
+
+[plugins]
+
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+vanniktech = { id = "com.vanniktech.maven.publish", version.ref = "vanniktech" }
+
+
+[libraries]
+
+# Ktor.
+# https://api.ktor.io
+# https://github.com/ktorio/ktor
+# https://github.com/ktorio/ktor/releases
+ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
