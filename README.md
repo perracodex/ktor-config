@@ -1,10 +1,16 @@
 # [KtorConfig](https://github.com/perracodex/ktor-config)
 
-A type-safe configuration mapper for the [Ktor](https://ktor.io/) framework.
+A type-safe configuration mapper for the [Ktor](https://ktor.io/) framework, providing a way to access settings in a comfortable and type-safe manner.
+```kotlin
+fun someFunction() {
+    val foo1 = AppSettings.deployment.host
+    val foo2 = AppSettings.security.encryption.atRest.algorithm
+}
+```
 
 ---
 
-### Features
+## Features
 - **Type-Safe Parsing**: Automatically maps configuration keys into Kotlin data classes.
 - **Nested Configurations**: Automatically handles complex nested configuration structures.
 - **List Parsing**: Supports parsing of lists from both HOCON arrays and comma-separated strings.
@@ -13,7 +19,7 @@ A type-safe configuration mapper for the [Ktor](https://ktor.io/) framework.
 
 ---
 
-### Installation
+## Installation
 Add the library to your project gradle dependencies. Make sure to replace `1.0.0` with the latest version.
 
 ```kotlin
@@ -26,13 +32,14 @@ dependencies {
 
 ---
 
-### Usage
+## Usage
 
 _See also the [API reference documentation](https://www.javadoc.io/doc/io.github.perracodex/ktor-config/latest/-ktor-config/io.perracodex.ktor.config/index.html)._
 
-#### 1. Define Your Configuration Data Classes
-Create data classes that represent your configuration structure. Each data class, including nested ones, **must** implement
-the `IConfigCatalogSection` interface. Nested data classes are supported for handling complex configuration structures.
+### 1. Define the data classes that will hold the configuration settings.
+Create data classes that represent the desired configuration structure. Each data class, including nested ones, **must** implement
+the `IConfigCatalogSection` interface.
+Referenced and nested data classes are supported for handling complex configuration structures.
 
 **Examples:**
 ```kotlin
@@ -42,15 +49,15 @@ data class DeploymentSettings(
     val host: String,
 ) : IConfigCatalogSection
 
-data class SecuritySettings(
+data class SecuritySettings( // Example with referenced data classes.
     val encryption: EncryptionSettings,
     val basicAuth: BasicAuthSettings,
     val jwtAuth: JwtAuthSettings,
 ) : IConfigCatalogSection
 
-data class EncryptionSettings(
-    val atRest: Spec,
-    val atTransit: Spec
+data class EncryptionSettings( // Example with nested data class.
+    val atRest: Spec, 
+    val atTransit: Spec 
 ) : IConfigCatalogSection {
     data class Spec(
         val algorithm: String,
@@ -75,8 +82,8 @@ data class JwtAuthSettings(
 ) : IConfigCatalogSection
 ```
 
-#### 2. Define the catalog class that will hold the configuration data classes.
-The catalog class **must** implement the `IConfigCatalog` interface. It should contain the top level configuration sections.
+### 2. Define the main catalog data class.
+The catalog data class holds all the top-level settings. It **must** implement the `IConfigCatalog` interface.
 
 ```kotlin
 data class ConfigurationCatalog(
@@ -85,21 +92,20 @@ data class ConfigurationCatalog(
 ) : IConfigCatalog
 ```
 
-#### 3. Define a singleton object to load and provide the configuration catalog across the application.
-Mapping between the configuration file and the data classes is done in this object.
-The syntax is simple: define a list of `ConfigCatalogMap` objects, each representing a mapping between
-a configuration section and a data class property.
+### 3. Define a singleton object to load and provide the configuration catalog across the application.
+To provide the settings in a centralized manner a singleton is needed.
+This one will both load the settings and also provide them across the application.
+
+To load the settings a mapping between the HOCON key paths and the target data classes must be defined,
+so that the parser understands what to build. The syntax is simple. define a list of `ConfigCatalogMap` objects,
+each representing a mapping between a configuration section and a data class property.
 
 For example, the following mapping will parse the `ktor.deployment` section from the configuration file
-and map it to the `DeploymentSettings` property in the `ConfigurationCatalog` class.
+and map it to the `DeploymentSettings` property in the `ConfigurationCatalog` implementation.
 
 ```kotlin
 ConfigCatalogMap(keyPath = "ktor.deployment", catalogProperty = "deployment", propertyClass = DeploymentSettings::class)
 ```
-
-In this example, the `keyPath` is the hierarchical key-path in the HOCON configuration file from which to parse,
-the `catalogProperty` is the property name in the `IConfigCatalog` implementation, and the `propertyClass` is the
-top-level data class to instantiate.
 
 `keyPath` can be a simple key or a hierarchical path. For example, the key-path `"ktor.deployment"` will parse the
 `deployment` section under the `ktor` section in the configuration file.
@@ -142,7 +148,7 @@ object AppSettings {
 }
 ```
 
-#### 4. Load the Configuration in the Application Module
+### 4. Load the Configuration in the Application Module
 This is the most important step. It must be done in the application module to ensure the configuration
 is available throughout the application. It should be the very first step in the module.
 
@@ -165,7 +171,7 @@ fun Application.yourApplicationModule() {
 }
 ```
 
-#### 5. Done. Now you can access the configuration from anywhere in the application.
+### 5. Done. Now the configuration can be accessed from anywhere in the application.
 **Example:**
 ```kotlin
 fun someFunction() {
@@ -176,9 +182,9 @@ fun someFunction() {
 
 ---
 
-### Arrays And Enums
-Both Enums and Arrays are supported in the configuration file.
-For Arrays, you can use either comma-separated strings or HOCON arrays.
+## Arrays And Enums
+Both `Enums` and `Arrays` are supported. For Arrays, is possible to use either comma-separated strings or HOCON arrays.
+Arrays of enums are also supported.
 
 **Example:**
 ```hocon
@@ -198,7 +204,7 @@ ktor {
 
 ---
 
-### Sample HOCON configuration file corresponding yo the mentioned data classes examples
+## Sample HOCON file corresponding to the mentioned data classes examples
 ```hocon    
 ktor {
     deployment {
@@ -240,7 +246,7 @@ security {
 
 --- 
 
-### Full working example
+## Full working example
 
 Refer to the [krud project](https://github.com/perracodex/Kcrud).
 A full example with complex configuration structures and nested data classes is available in the `kcrud-core` module.
@@ -255,5 +261,5 @@ Configuration:
 
 ---
 
-### License
+## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
