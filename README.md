@@ -1,6 +1,6 @@
 # [KtorConfig](https://github.com/perracodex/ktor-config)
 
-A type-safe configuration mapper for the [Ktor](https://ktor.io/) framework, providing a way to access settings in a comfortable and type-safe manner.
+A configuration mapper for the [Ktor](https://ktor.io/) framework, providing a way to access settings in a comfortable and type-safe manner.
 ```kotlin
 fun someFunction() {
     val foo1 = AppSettings.deployment.host
