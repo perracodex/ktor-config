@@ -20,11 +20,11 @@ fun someFunction() {
 ---
 
 ## Installation
-Add the library to your project gradle dependencies. Make sure to replace `1.0.0` with the latest version.
+Add the library to your project gradle dependencies. Make sure to replace `1.0.1` with the latest version.
 
 ```kotlin
 dependencies {
-    implementation("io.github.perracodex:ktor-config:1.0.0")
+    implementation("io.github.perracodex:ktor-config:1.0.1")
 }
 ```
 
