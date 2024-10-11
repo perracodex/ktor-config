@@ -3,8 +3,8 @@
 [versions]
 
 dokka = "1.9.20"                        # https://github.com/Kotlin/dokka/releases
-kotlin = "2.0.20"                       # https://github.com/JetBrains/kotlin/releases
-ktor = "2.3.12"                         # https://ktor.io/docs/releases.html#release-details
+kotlin = "2.0.21"                       # https://github.com/JetBrains/kotlin/releases
+ktor = "3.0.0"                          # https://ktor.io/docs/releases.html#release-details
 vanniktech = "0.29.0"                   # https://github.com/vanniktech/gradle-maven-publish-plugin/releases
 
 [plugins]

@@ -248,7 +248,7 @@ security {
 
 ## Full working example
 
-Refer to the [krud project](https://github.com/perracodex/Kcrud).
+Refer to the [Kcrud project](https://github.com/perracodex/Kcrud).
 A full example with complex configuration structures and nested data classes is available in the `kcrud-core` module.
 
 Settings: 
