@@ -48,8 +48,7 @@ the [API reference documentation](https://www.javadoc.io/doc/io.github.perracode
 
 ### 1. Define the data classes that will hold the configuration settings.
 
-Create data classes that represent the desired configuration structure. Each data class, including nested ones, **must** implement
-the `ConfigCatalogSection` interface.
+Create data classes that represent the desired configuration structure.
 Referenced and nested data classes are supported for handling complex configuration structures.
 
 **Examples:**
@@ -59,31 +58,31 @@ data class DeploymentSettings(
     val port: Int,
     val sslPort: Int,
     val host: String,
-) : ConfigCatalogSection
+)
 
 data class SecuritySettings(
     // Example with referenced data classes.
     val encryption: EncryptionSettings,
     val basicAuth: BasicAuthSettings,
     val jwtAuth: JwtAuthSettings,
-) : ConfigCatalogSection
+)
 
 data class EncryptionSettings( // Example with nested data class.
     val atRest: Spec,
     val atTransit: Spec
-) : ConfigCatalogSection {
+) {
     data class Spec(
         val algorithm: String,
         val salt: String,
         val key: String,
         val sign: String
-    ) : ConfigCatalogSection
+    )
 }
 
 data class BasicAuthSettings(
     val providerName: String,
     val realm: String,
-) : ConfigCatalogSection
+)
 
 data class JwtAuthSettings(
     val providerName: String,
@@ -92,18 +91,18 @@ data class JwtAuthSettings(
     val issuer: String,
     val realm: String,
     val secretKey: String
-) : ConfigCatalogSection
+)
 ```
 
 ### 2. Define the main catalog data class.
 
-The catalog data class holds all the top-level settings. It **must** implement the `ConfigCatalog` interface.
+The catalog data class holds all the top-level settings.
 
 ```kotlin
 data class ConfigurationCatalog(
     val deployment: DeploymentSettings,
     val security: SecuritySettings
-) : ConfigCatalog
+)
 ```
 
 ### 3. Define a singleton object to load and provide the configuration catalog across the application.
@@ -112,7 +111,7 @@ To provide the settings in a centralized manner a singleton is needed.
 This one will both load the settings and also provide them across the application.
 
 To load the settings a mapping between the HOCON key paths and the target data classes must be defined,
-so that the parser understands what to build. The syntax is simple. define a list of `ConfigCatalogMap` objects,
+so that the parser understands what to build. The syntax is simple. define a list of objects
 each representing a mapping between a configuration section and a data class property.
 
 For example, the following mapping will parse the `ktor.deployment` section from the configuration file
@@ -143,9 +142,9 @@ object AppSettings {
         // List defining the mappings between configuration file sections and properties within ConfigurationCatalog.
         // Each entry in the list consists of three components:
         // 1. keyPath: The hierarchical key-path in the configuration file from which to parse, (e.g., `"ktor.deployment"`).
-        // 2. catalogProperty: The property name in the [ConfigCatalog] implementation.
+        // 2. catalogProperty: The property name in the configuration catalog implementation.
         // 3. propertyClass: The catalogProperty class to instantiate.
-        val catalogMappings: List<ConfigCatalogMap<out ConfigCatalogSection>> = listOf(
+        val catalogMappings: List<ConfigCatalogMap> = listOf(
             ConfigCatalogMap(keyPath = "ktor.deployment", catalogProperty = "deployment", propertyClass = DeploymentSettings::class),
             ConfigCatalogMap(keyPath = "security", catalogProperty = "security", propertyClass = SecuritySettings::class)
         )

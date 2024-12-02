@@ -53,26 +53,23 @@ public object ConfigurationParser {
      * @property parameter A catalog constructor [KParameter].
      * @property instance The instance to be assigned to the  [parameter].
      */
-    private data class CatalogPropertyMap(val parameter: KParameter, var instance: ConfigCatalogSection)
+    private data class CatalogPropertyMap(val parameter: KParameter, var instance: Any)
 
     /**
      * Performs the application configuration parsing.
      * Top-level configurations are parsed concurrently.
      *
      * @param configuration The [ApplicationConfig] object to be parsed.
-     * @param catalogClass The class holding all the configuration groups. Must implement [ConfigCatalog].
+     * @param catalogClass The class holding all the configuration groups.
      * @param catalogMappings Map of top-level configuration paths to their corresponding classes.
      * @return A new [catalogClass] instance populated with the parsed configuration data.
      * @throws ConfigurationException if the primary constructor is missing in the [catalogClass],
      * or any error occurs during the parsing process.
-     *
-     * @see ConfigCatalog
-     * @see ConfigCatalogSection
      */
-    public suspend fun <T : ConfigCatalog> parse(
+    public suspend fun <T : Any> parse(
         configuration: ApplicationConfig,
         catalogClass: KClass<T>,
-        catalogMappings: List<ConfigCatalogMap<out ConfigCatalogSection>>
+        catalogMappings: List<ConfigCatalogMap>
     ): T {
         // Retrieve the primary constructor of the configuration catalog class,
         // which will be used to instantiate the parsing output result.
@@ -83,12 +80,12 @@ public object ConfigurationParser {
 
         // Map each configuration path to its corresponding class,
         // and construct the arguments map for the output object.
-        val catalogArguments: Map<KParameter, ConfigCatalogSection> = withContext(Dispatchers.IO) {
+        val catalogArguments: Map<KParameter, Any> = withContext(Dispatchers.IO) {
             val tasks: List<Deferred<CatalogPropertyMap>> = catalogMappings.map { configCatalogMap ->
                 async {
                     // Map each configuration path to its corresponding class.
                     // Nested settings are handled recursively.
-                    val catalogParameterInstance: ConfigCatalogSection = instantiateConfig(
+                    val catalogParameterInstance: Any = instantiateConfig(
                         config = configuration,
                         keyPath = configCatalogMap.keyPath,
                         kClass = configCatalogMap.propertyClass
