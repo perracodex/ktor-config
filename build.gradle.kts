@@ -1,6 +1,8 @@
 /*
  * Copyright (c) 2024-Present Perracodex. Use of this source code is governed by an MIT license.
  */
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.KotlinJvm
 import com.vanniktech.maven.publish.SonatypeHost
 import org.gradle.configurationcache.extensions.capitalized
 
@@ -10,6 +12,7 @@ plugins {
     alias(libs.plugins.dokka)
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.vanniktech)
+    alias(libs.plugins.detekt)
 }
 
 group = project.properties["group"] as String
@@ -30,6 +33,7 @@ kotlin {
 }
 
 dependencies {
+    detektPlugins(libs.detekt.formatting)
     implementation(libs.ktor.server.core)
     testImplementation(kotlin("test"))
 }
@@ -49,11 +53,25 @@ mavenPublishing {
     val pomName: String = project.properties["pomName"] as String
     val pomDescription: String = project.properties["pomDescription"] as String
 
+    configure(
+        KotlinJvm(
+            javadocJar = JavadocJar.Dokka("dokkaHtml"),
+            sourcesJar = true,
+        )
+    )
+
     coordinates(
         groupId = group as String,
         artifactId = artifactId,
         version = version as String
     )
+
+    publishToMavenCentral(
+        host = SonatypeHost.CENTRAL_PORTAL,
+        automaticRelease = false
+    )
+
+    signAllPublications()
 
     pom {
         name.set(pomName)
@@ -79,18 +97,15 @@ mavenPublishing {
             url.set("https://$repository/$artifactId")
         }
     }
-
-    publishToMavenCentral(host = SonatypeHost.CENTRAL_PORTAL, automaticRelease = false)
-    signAllPublications()
 }
 
 signing {
     val privateKeyPath: String? = System.getenv("MAVEN_SIGNING_KEY_PATH")
     val passphrase: String? = System.getenv("MAVEN_SIGNING_KEY_PASSPHRASE")
 
-    if (privateKeyPath.isNullOrBlank())
+    if (privateKeyPath.isNullOrBlank()) {
         println("MAVEN_SIGNING_KEY_PATH is not set. Skipping signing.")
-    else if (passphrase.isNullOrBlank()) {
+    } else if (passphrase.isNullOrBlank()) {
         println("MAVEN_SIGNING_KEY_PASSPHRASE is not set. Skipping signing.")
     } else {
         val privateKey: String = File(privateKeyPath).readText()

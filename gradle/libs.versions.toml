@@ -2,19 +2,32 @@
 
 [versions]
 
-dokka = "1.9.20"                        # https://github.com/Kotlin/dokka/releases
-kotlin = "2.0.21"                       # https://github.com/JetBrains/kotlin/releases
-ktor = "3.0.0"                          # https://ktor.io/docs/releases.html#release-details
-vanniktech = "0.29.0"                   # https://github.com/vanniktech/gradle-maven-publish-plugin/releases
+# https://github.com/detekt/detekt/releases
+detekt = "1.23.7"
+# https://github.com/Kotlin/dokka/releases
+dokka = "1.9.20"
+# https://github.com/JetBrains/kotlin/releases
+kotlin = "2.1.0"
+# https://ktor.io/docs/releases.html#release-details
+ktor = "3.0.1"
+# https://github.com/vanniktech/gradle-maven-publish-plugin/releases
+vanniktech = "0.29.0"
+
 
 [plugins]
 
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 vanniktech = { id = "com.vanniktech.maven.publish", version.ref = "vanniktech" }
 
 
 [libraries]
+
+# Detekt.
+# https://github.com/detekt/detekt
+# https://github.com/detekt/detekt/releases
+detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 
 # Ktor.
 # https://api.ktor.io
