@@ -314,7 +314,6 @@ public object ConfigurationParser {
      * @param elementsKClass The KClass to which the list elements should be converted.
      * @return The converted list or an empty list if not found.
      */
-    @SuppressWarnings("SwallowedException")
     private fun parseListValues(
         config: ApplicationConfig,
         keyPath: String,
