@@ -5,8 +5,8 @@
 detekt = "1.23.7"
 dokka = "2.0.0"
 kotlin = "2.1.0"
-ktor = "3.0.2"
-vanniktech = "0.29.0"
+ktor = "3.0.3"
+vanniktech = "0.30.0"
 
 
 [plugins]
