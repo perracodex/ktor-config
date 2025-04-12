@@ -44,7 +44,7 @@ public object ConfigurationParser {
      * ensuring that delimiters within single quotes are ignored.
      */
     private val SINGLE_STRING_ARRAY_REGEX_PATTERN: Regex by lazy {
-        Regex(pattern = "${Regex.escape(SINGLE_STRING_ARRAY_DELIMITER.toString())}(?=(?:[^']*'[^']*')*[^']*\$)")
+        Regex(pattern = "${Regex.escape(SINGLE_STRING_ARRAY_DELIMITER.toString())}(?=(?:[^']*'[^']*')*[^']*$)")
     }
 
     /**
